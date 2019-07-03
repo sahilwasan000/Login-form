@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/Node-Form');
+mongoose.connect('mongodb://localhost:27017/Node-Form', { useNewUrlParser: true });
 
 module.exports = {mongoose};
