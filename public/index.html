@@ -7,27 +7,34 @@
 	</head>
 	<body>
 		<div class="form-structor">
+			<form action="/register" method="post" onAfterSubmit='this.reset'>
 			<div class="signup">
+				<div class="center">
 				<h1 class="form-title" id="signup"><span>or</span>Sign up</h1>
 				<div class="form-holder">
-					<input type="text" class="input" placeholder="Name" />
-					<input type="email" class="input" placeholder="Email" />
-					<input type="password" class="input" placeholder="Password" />
-					<input type="password" class="input" placeholder="Confirm Password" />
+					<input type="text" class="input" name = 'name' id = 'name' placeholder="Name" />
+					<input type="email" class="input" name = 'email' id = 'email' placeholder="Email" />
+					<input type="password" class="input" name = 'password' id = 'password' placeholder="Password" />
+					<input type="password" class="input" name = 'password2' id = 'password2' placeholder="Confirm Password" />
 				</div>
 				<button class="submit-btn">Sign up</button>
 			</div>
+		</div>
+		</form>
+		<form action="/login" method="post">
 			<div class="login slide-up">
 				<div class="center">
-					<h2 class="form-title" id="login"><span>or</span>Log in</h2>
+					<h1 class="form-title" id="login"><span>or</span>Log in</h1>
 					<div class="form-holder">
-						<input type="email" class="input" placeholder="Email" />
-						<input type="password" class="input" placeholder="Password" />
+						<input type="email" class="input" name ='email' id = 'email' placeholder="Email" />
+						<input type="password" class="input" name ='password' id = 'email' placeholder="Password" />
 					</div>
 					<button class="submit-btn">Log in</button>
 				</div>
 			</div>
+		</form>
 		</div>
+
 		<script type="text/javascript">
 			console.clear();
 
