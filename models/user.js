@@ -28,18 +28,4 @@ var UserSchema = new Schema({
 
 var User = mongoose.model('User', UserSchema);
 
-
-// UserSchema.pre('save').then((next) => {
-//   bcrypt.genSalt(10, (err, salt) => {
-//     bcrypt.hash(newUser.password, (err, hash)) => {
-//       newUser.password = hash;
-//        next();
-//
-//        if(err) console.log('error aaya h', err)
-//        newUser.save().then()
-//     }
-//   })
-// });
-
-
 module.exports = {User};
