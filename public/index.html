@@ -3,11 +3,11 @@
 	<head>
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="style.css">
-		<title></title>
+		<title>Login-Form</title>
 	</head>
 	<body>
 		<div class="form-structor">
-			<form action="/register" method="post" onAfterSubmit='this.reset'>
+			<form action="/register" method="post">
 			<div class="signup">
 				<div class="center">
 				<h1 class="form-title" id="signup"><span>or</span>Sign up</h1>
@@ -17,7 +17,7 @@
 					<input type="password" class="input" name = 'password' id = 'password' placeholder="Password" />
 					<input type="password" class="input" name = 'password2' id = 'password2' placeholder="Confirm Password" />
 				</div>
-				<button class="submit-btn">Sign up</button>
+				<button type="submit" class="submit-btn">Sign up</button>
 			</div>
 		</div>
 		</form>
@@ -29,7 +29,8 @@
 						<input type="email" class="input" name ='email' id = 'email' placeholder="Email" />
 						<input type="password" class="input" name ='password' id = 'email' placeholder="Password" />
 					</div>
-					<button class="submit-btn">Log in</button>
+					<button type="submit" class="submit-btn">Log in</button>
+					<input type="button" onclick="location.href='./forgot-pass.html';" value="Forgot Password" class="submit-btn" id="submit"/>
 				</div>
 			</div>
 		</form>
