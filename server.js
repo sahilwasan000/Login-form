@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+var nodemailer = require("nodemailer");
 
 const app = express();
 
@@ -12,13 +13,13 @@ const {User} = require('./models/user');
 const {validateRegisteredUser} = require('./routes/register');
 const {validateLoginUser} = require('./routes/login');
 
+app.use('/', express.static(path.join(__dirname, 'public')));
 
 // Passport middleware
 app.use(passport.initialize());
 
 // Passport routes
 require("./routes/passport")(passport);
-
 
 //-----------------------Without using mongoose----------------------//
 // const {MongoClient} = require('mongodb');
@@ -48,7 +49,11 @@ require("./routes/passport")(passport);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use('/', express.static(path.join(__dirname, 'public')));
+
+app.get('/',function(req,res){
+  res.sendfile('./index.html');
+});
+
 
 // Route to register
 app.post('/register', (req, res) => {
@@ -80,7 +85,7 @@ app.post('/register', (req, res) => {
         newUser.password = hash;
 
         newUser.save().then((user) => {
-          res.json(newUser);
+          res.redirect('/success.html');
         }).catch((e) => console.log(e));
       });
     });
@@ -90,14 +95,11 @@ app.post('/register', (req, res) => {
 // Route to login
 app.post('/login', (req, res) => {
   const {errors, isValid} = validateLoginUser(req.body);
-
   if(!isValid){
     return res.status(401).json(errors);
   }
-
   const email = req.body.email;
   const password = req.body.password;
-
   User.findOne({email}).then((user) => {
     if(!user){
       return res.status(401).json({emailnotfound: "Email Not Found."});
@@ -105,43 +107,62 @@ app.post('/login', (req, res) => {
 
     bcrypt.compare(password, user.password).then((isMatch) => {
 
-      if(isMatch) {
-        const payload = {
-        id: user.id,
-        name: user.name
-      };
+      if(isMatch) res.redirect('/login-success.html');
 
-      jwt.sign(payload, 'abc123', {
-            expiresIn: 31556926
-          }, (err, token) => {
-            res.json({
-            success: true,
-            token: "Bearer " + token
-          });
-        });
-        }
-        else {
-          return res
-            .status(400)
-            .json({ passwordincorrect: "Password incorrect" });
+      //   const payload = {
+      //   id: user.id,
+      //   name: user.name
+      // };
+      // jwt.sign(payload, 'abc123', {
+      //       expiresIn: 31556926
+      //     },
+      //      (err, token) => {
+      //       res.json({
+      //       success: true,
+      //       token: "Bearer " + token
+      //      // res.redirect('/login.html');
+      //     });
+
+      else {
+        return res
+        .status(400)
+        .json({ passwordincorrect: "Password incorrect" });
       }
     });
+  });
+});
+
+var smtpTransport = nodemailer.createTransport({
+  service: "gmail",
+  host: "smtp.gmail.com",
+  auth: {
+    user: "sahilwasan000@gmail.com",
+    pass: "Sahil@!1234"
+  }
+});
+
+app.get('/send',function(req,res){
+  var mailOptions={
+    to : req.query.to,
+    subject : req.query.subject,
+    text : req.query.text
+  };
+
+  console.log(mailOptions);
+
+  smtpTransport.sendMail(mailOptions, function(error, response){
+    if(error){
+      console.log(error);
+      res.end("error");
+    }else{
+      res.send("sent");
+      res.redirect('./index.html');
+    }
   });
 });
 
 app.listen(8080, () => {
   console.log('Server listening on port 8080');
 });
-// var newUser = new User({
-//   name: 'Sahil',
-//   email: 'sahil@gmail.com',
-//   password: '1zss234'
-// });
-//
-// newUser.save().then((doc) => {
-//   console.log('user saved', doc);
-// }, (e) => {
-//   console.log('unable to save user');
-// });
 
 module.exports = {app};
